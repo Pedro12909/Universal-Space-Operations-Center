@@ -198,7 +198,10 @@ public class GuiBuilder {
         stateBox.minWidth(70);
 
         // use config to create state view
-        for (int i = 0; i < ConfigHandler.countItems("segmentTitle", CONFIG_PATH); i++) {
+        final int segmentTitleCount =
+                ConfigHandler.countItems("segmentTitle", CONFIG_PATH);
+
+        for (int i = 0; i < segmentTitleCount; i++) {
             VBox vBox = new VBox();
             GridPane stateGrid = new GridPane();
             stateGrid.setVgap(5);
@@ -212,22 +215,23 @@ public class GuiBuilder {
             Label segmentTitle = new Label();
             segmentTitle.setText(config.getProperty("segmentTitle[" + i + "]"));
             stateGrid.add(segmentTitle, 0, 0);
-            //
-            for (int j = 0; j < ConfigHandler.countItems("keyword[" + (i + 1) + "]", CONFIG_PATH); j++) {
-                //
+
+            final int keywordCounter = ConfigHandler.countItems("keyword[" + (i + 1) + "]", CONFIG_PATH);
+            for (int j = 0; j < keywordCounter; j++) {
+
                 Label label = new Label();
-                //
+
                 if (column == 0) {
                     label.setText(config.getProperty("keyword[" + (i + 1) + "][" + (j + 1) + "]"));
                 }
-                //
+
                 if (column == 1) {
                     //TODO: get variable name
                     statePanelController.addLabel(label, "Test");
                 }
-                //
+
                 stateGrid.add(label, column, row);
-                //
+
                 column++;
                 if (column > (maxColumns-1)) {
                     row++;
@@ -265,7 +269,8 @@ public class GuiBuilder {
         ChartController chartController = new ChartController();
 
         // Setting
-        for (int i = 0; i < ConfigHandler.countItems("chartTitle", CONFIG_PATH); i++) {
+        final int chartTitleCount = ConfigHandler.countItems("chartTitle", CONFIG_PATH);
+        for (int i = 0; i < chartTitleCount; i++) {
             //
             LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
             chart.setTitle(config.getProperty("chartTitle[" + (i+1) + "]"));
@@ -312,7 +317,7 @@ public class GuiBuilder {
             logTab.addFXMLTab("fxml/SerialPanel.fxml", "Serial Connection");
         }
         //TODO: should be named something like Mail
-        if (Boolean.parseBoolean(config.getProperty("iridumPanel"))) {
+        if (Boolean.parseBoolean(config.getProperty("iridiumPanel"))) {
             logTab.addFXMLTab("fxml/IridiumPanel.fxml", "Iridium Connection");
         }
 
@@ -320,6 +325,11 @@ public class GuiBuilder {
         return logTab;
     }
 
+    /**
+     * Reads the protocols/ directory and returns a string of
+     * all protocols inside there
+     * @return list of protocol names inside the protocols/ folder
+     */
     private static List<String> getAvailableProtocols() {
         List<String> availableProtocols = new LinkedList<>();
 
